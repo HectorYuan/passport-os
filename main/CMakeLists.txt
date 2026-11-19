@@ -148,3 +148,14 @@ target_add_binary_data(${COMPONENT_LIB} "${phone_setup_gz}" BINARY)
 if(PASSPORT_RADIO_HLS_TEST)
     target_compile_definitions(${COMPONENT_LIB} PRIVATE PASSPORT_RADIO_HLS_TEST=1)
 endif()
+
+# 自建云端后端：编译期固化 OTA + WS 地址（NVS 中已有值仍优先，仅作空值回落）。
+# OTA 指向自建端点（www.edufde.com/xiaozhi/ota/），下发 ws_url/token；
+# WS 编译期地址作为 OTA 失败时的兜底（防止 OTA 服务不可用时设备彻底连不上）。
+option(PASSPORT_CLOUD_BACKEND "Default to self-hosted xiaozhi-brain backend" ON)
+if(PASSPORT_CLOUD_BACKEND)
+    target_compile_definitions(${COMPONENT_LIB} PRIVATE
+        PASSPORT_CLOUD_BACKEND=1
+        PASSPORT_CLOUD_OTA_URL="https://device.edufde.com/xiaozhi/ota/"
+        PASSPORT_CLOUD_WS_URL="wss://xiaozhi-brain-347006-10-1503281203.sh.run.tcloudbase.com/xiaozhi/v1/")
+endif()

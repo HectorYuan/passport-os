@@ -21,7 +21,12 @@ namespace {
 
 constexpr int kHttpTimeoutMs = 10000;
 constexpr size_t kRespCap = 1024;   // 官方 OTA 响应实测约 500 字节
+#ifdef PASSPORT_CLOUD_BACKEND
+// 自建后端：默认 OTA 指向快速失败地址，让设备回落到 NVS/编译期的 ws_url。
+constexpr const char *kDefaultOtaUrl = PASSPORT_CLOUD_OTA_URL;
+#else
 constexpr const char *kDefaultOtaUrl = "https://api.tenclass.net/xiaozhi/ota/";
+#endif
 
 int s_last_http_status = 0;
 

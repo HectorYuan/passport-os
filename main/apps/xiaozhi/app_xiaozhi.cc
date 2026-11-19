@@ -409,7 +409,11 @@ void do_connect() {
 
     if (url.empty()) url = store_get_string(kNsXiaozhi, "ws_url", "");
     if (url.empty()) url = store_get_string(kNsWebsocket, "url", "");
+#ifdef PASSPORT_CLOUD_BACKEND
+    if (url.empty()) url = PASSPORT_CLOUD_WS_URL;   // 编译期固化自建后端，新设备无需 NVS hack
+#else
     if (url.empty()) url = "wss://api.tenclass.net/xiaozhi/v1/";
+#endif
 
     if (token.empty()) token = store_get_string(kNsXiaozhi, "token", "");
     if (token.empty()) token = store_get_string(kNsWebsocket, "token", "");
